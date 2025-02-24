@@ -6,12 +6,9 @@ import Foundation
 public class ChordTable {
     public static let shared = ChordTable()
 
-    static func hash(_ noteClasses: [NoteClass]) -> Int {
-        var r = NoteSet()
-        for noteClass in noteClasses {
-            r.add(noteClass.canonicalNote)
-        }
-        return r.hashValue
+    static func hash(_ chord: Chord) -> Int {
+        // Hash combines both the root note and chord type to differentiate inversions
+        return "\(chord.root.description)\(chord.type)".hashValue
     }
 
     static func generateChords(type: ChordType, _ r: inout [Int: Chord]) {
@@ -24,8 +21,8 @@ public class ChordTable {
                     // chord is not valid
                     continue
                 }
-                if r[ChordTable.hash(chord.noteClasses)] == nil {
-                    r[ChordTable.hash(chord.noteClasses)] = chord
+                if r[ChordTable.hash(chord)] == nil {
+                    r[ChordTable.hash(chord)] = chord
                 }
             }
         }
