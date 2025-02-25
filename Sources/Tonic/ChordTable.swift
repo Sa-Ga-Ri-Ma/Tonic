@@ -7,8 +7,9 @@ public class ChordTable {
     public static let shared = ChordTable()
 
     static func hash(_ chord: Chord) -> Int {
-        // Hash combines both the root note and chord type to differentiate inversions
-        return "\(chord.root.description)\(chord.type)".hashValue
+        // Hash combines the root note and the sorted set of note classes to ensure uniqueness
+        let sortedNotes = chord.noteClasses.map { $0.description }.sorted()
+        return "\(chord.root.description)\(sortedNotes.joined())".hashValue
     }
 
     static func generateChords(type: ChordType, _ r: inout [Int: Chord]) {
