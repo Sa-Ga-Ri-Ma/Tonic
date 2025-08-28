@@ -162,4 +162,21 @@ final class NoteTests: XCTestCase {
         let empty = NoteSet()
         XCTAssertNil(empty.first)
     }
+
+    func testClampNoteBounds() {
+       let bMinus3 = Note(.B, octave: -3)
+       XCTAssertEqual(bMinus3.noteNumber, 0)
+       
+       let cFlatMinus3 = Note(.C, accidental: .flat, octave: -3)
+       XCTAssertEqual(cFlatMinus3.noteNumber, 0)
+       
+       let a8 = Note(.A, octave: 8)
+       XCTAssertEqual(a8.noteNumber, 127)
+       
+       let gSharp8 = Note(.G, accidental: .sharp, octave: 8)
+       XCTAssertEqual(gSharp8.noteNumber, 127)
+       
+       let c9 = Note(.C, octave: 9)
+       XCTAssertEqual(c9.noteNumber, 127)
+   }
 }

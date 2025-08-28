@@ -82,19 +82,31 @@ public struct Note: Sendable, Equatable, Hashable, Codable {
 
     /// MIDI Note 0-127 starting at C
     public var noteNumber: Int8 {
-        let octaveBounds = ((octave + 2) * 12) ... ((octave + 3) * 12)
-        var note = Int(noteClass.letter.baseNote) + Int(noteClass.accidental.rawValue)
-        if noteClass.letter == .B && noteClass.accidental.rawValue > 0 {
-            note -= 12
-        }
-        if noteClass.letter == .C && noteClass.accidental.rawValue < 0 {
-            note += 12
-        }
-        while !octaveBounds.contains(note) {
-            note += 12
-        }
-        return Int8(note)
-    }
+         if octave < -2 {
+             return 0
+         }
+         if octave > 8 {
+             return 127
+         }
+         let octaveBounds = ((octave + 2) * 12) ... ((octave + 3) * 12)
+         var note = Int(noteClass.letter.baseNote) + Int(noteClass.accidental.rawValue)
+         if noteClass.letter == .B && noteClass.accidental.rawValue > 0 {
+             note -= 12
+         }
+         if noteClass.letter == .C && noteClass.accidental.rawValue < 0 {
+             note += 12
+         }
+         while !octaveBounds.contains(note) {
+             note += 12
+         }
+         if note < 0 {
+             return 0
+         }
+         if note > 127 {
+             return 127
+         }
+         return Int8(note)
+     }
 
     /// The pitch for the note
     public var pitch: Pitch {
